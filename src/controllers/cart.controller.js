@@ -3,8 +3,6 @@ const catchAsync = require("../utils/catchAsync");
 const { cartService } = require("../services");
 
 /**
- * Fetch the cart details
- *
  * Example response:
  * HTTP 200 OK
  * {
@@ -36,9 +34,9 @@ const getCart = catchAsync(async (req, res) => {
   res.send(cart);
 });
 
+
 /**
  * Add a product to cart
- *
  *
  */
 const addProductToCart = catchAsync(async (req, res) => {
@@ -52,13 +50,6 @@ const addProductToCart = catchAsync(async (req, res) => {
 });
 
 /**
- * Update product quantity in cart
- * - If updated quantity > 0, 
- * --- update product quantity in user's cart
- * --- return "200 OK" and the updated cart object
- * - If updated quantity == 0, 
- * --- delete the product from user's cart
- * --- return "204 NO CONTENT"
  * 
  * Example responses:
  * HTTP 200 - on successful update
@@ -67,22 +58,32 @@ const addProductToCart = catchAsync(async (req, res) => {
  *
  */
 const updateProductInCart = catchAsync(async (req, res) => {
+  if(req.body.quantity > 0){
+    const cart = await cartService.updateProductInCart(
+      req.user, 
+      req.body.productId, 
+      req.body.quantity
+      );
+      return res.status(httpStatus.OK).send(cart);
+  }
+  if(req.body.quantity === 0){
+    const cart = await cartService.deleteProductFromCart(
+      req.user,
+      req.body.productId
+      );
+      return res.status(httpStatus.NO_CONTENT).send(cart);
+  }
 });
 
-/**
- * Checkout user's cart
- */
-const checkout = catchAsync(async (req, res) => {
-   await cartService.checkout();
-  return (
-    res
-      .send()
-  );
-});
+const checkoutProductInCart = catchAsync(async (req, res) => {
+  const user = await cartService.checkout(req.user);
+  return res.status(httpStatus.NO_CONTENT).send();
+})
+
 
 module.exports = {
   getCart,
   addProductToCart,
   updateProductInCart,
-  checkout,
+  checkoutProductInCart
 };

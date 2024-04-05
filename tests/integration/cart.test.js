@@ -1,3 +1,5 @@
+// CRIO_SOLUTION_START_MODULE_CART
+// CRIO_SOLUTION_END_MODULE_CART
 const request = require("supertest");
 const faker = require("faker");
 const httpStatus = require("http-status");

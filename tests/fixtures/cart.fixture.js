@@ -1,3 +1,5 @@
+// CRIO_SOLUTION_START_MODULE_CART
+// CRIO_SOLUTION_END_MODULE_CART
 const mongoose = require("mongoose");
 const { userOne, userTwo } = require("./user.fixture");
 const { Cart } = require("../../src/models");

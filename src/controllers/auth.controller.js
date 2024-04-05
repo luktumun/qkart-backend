@@ -3,13 +3,6 @@ const catchAsync = require("../utils/catchAsync");
 const { authService, userService, tokenService } = require("../services");
 
 /**
- * Perform the following steps:
- * -  Call the userService to create a new user
- * -  Generate auth tokens for the user
- * -  Send back
- * --- "201 Created" status code
- * --- response in the given format
- *
  * Example response:
  *
  * {
@@ -32,16 +25,18 @@ const { authService, userService, tokenService } = require("../services");
  *
  */
 const register = catchAsync(async (req, res) => {
+  const {name, email, password} = req.body;
+  const user = await userService.createUser({
+    name,
+    email,
+    password,
+  })
+  const tokens = await tokenService.generateAuthTokens(user);
+  res.status(httpStatus.CREATED).send({user, tokens});
+
 });
 
 /**
- * Perform the following steps:
- * -  Call the authservice to verify is password and email is valid
- * -  Generate auth tokens
- * -  Send back
- * --- "200 OK" status code
- * --- response in the given format
- *
  * Example response:
  *
  * {
@@ -64,6 +59,12 @@ const register = catchAsync(async (req, res) => {
  *
  */
 const login = catchAsync(async (req, res) => {
+  const user = await authService.loginUserWithEmailAndPassword(
+    req.body.email,
+    req.body.password
+  )
+  const tokens = await tokenService.generateAuthTokens(user);
+  res.status(200).json({user, tokens})
 });
 
 module.exports = {

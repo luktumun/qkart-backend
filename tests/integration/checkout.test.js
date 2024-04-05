@@ -1,3 +1,5 @@
+// CRIO_SOLUTION_START_MODULE_TEST
+// CRIO_SOLUTION_END_MODULE_TEST
 const request = require("supertest");
 const httpStatus = require("http-status");
 const app = require("../../src/app");
@@ -34,7 +36,12 @@ describe("Cart routes", () => {
       console.log(res.text);
 
       // TODO: CRIO_TASK_MODULE_TEST - Assert if status code is "401 UNAUTHORIZED"
-       expect(true).toEqual(false);
+      // CRIO_UNCOMMENT_START_MODULE_TEST
+      // expect(true).toEqual(false);
+      // CRIO_UNCOMMENT_END_MODULE_TEST
+      // CRIO_SOLUTION_START_MODULE_TEST
+      expect(res.status).toEqual(httpStatus.UNAUTHORIZED);
+      // CRIO_SOLUTION_END_MODULE_TEST
     });
 
     it("should return 400 if cart is empty", async () => {
@@ -50,7 +57,12 @@ describe("Cart routes", () => {
         .send();
 
       // TODO: CRIO_TASK_MODULE_TEST - Assert if status code is "400 BAD REQUEST"
-       expect(true).toEqual(false);
+      // CRIO_UNCOMMENT_START_MODULE_TEST
+      // expect(true).toEqual(false);
+      // CRIO_UNCOMMENT_END_MODULE_TEST
+      // CRIO_SOLUTION_START_MODULE_TEST
+      expect(res.status).toEqual(httpStatus.BAD_REQUEST);
+      // CRIO_SOLUTION_END_MODULE_TEST
     });
 
     it("should return 400 if user's address is not set", async () => {
@@ -65,7 +77,12 @@ describe("Cart routes", () => {
         .send();
 
       // TODO: CRIO_TASK_MODULE_TEST - Assert if status code is 400
-       expect(true).toEqual(false);
+      // CRIO_UNCOMMENT_START_MODULE_TEST
+      // expect(true).toEqual(false);
+      // CRIO_UNCOMMENT_END_MODULE_TEST
+      // CRIO_SOLUTION_START_MODULE_TEST
+      expect(res.status).toEqual(httpStatus.BAD_REQUEST);
+      // CRIO_SOLUTION_END_MODULE_TEST
     });
 
     it("should return 400 if not enough wallet balance", async () => {
@@ -79,7 +96,12 @@ describe("Cart routes", () => {
         .send();
 
       // TODO: CRIO_TASK_MODULE_TEST - Assert if status code is 400
-       expect(true).toEqual(false);
+      // CRIO_UNCOMMENT_START_MODULE_TEST
+      // expect(true).toEqual(false);
+      // CRIO_UNCOMMENT_END_MODULE_TEST
+      // CRIO_SOLUTION_START_MODULE_TEST
+      expect(res.status).toEqual(httpStatus.BAD_REQUEST);
+      // CRIO_SOLUTION_END_MODULE_TEST
     });
 
     it("should return 204 if cart is valid", async () => {
@@ -92,11 +114,21 @@ describe("Cart routes", () => {
         .send();
 
       // TODO: CRIO_TASK_MODULE_TEST - Assert if status code is 204
-       expect(true).toEqual(false);
+      // CRIO_UNCOMMENT_START_MODULE_TEST
+      // expect(true).toEqual(false);
+      // CRIO_UNCOMMENT_END_MODULE_TEST
+      // CRIO_SOLUTION_START_MODULE_TEST
+      expect(res.status).toEqual(httpStatus.NO_CONTENT);
+      // CRIO_SOLUTION_END_MODULE_TEST
 
       // TODO: CRIO_TASK_MODULE_TEST - Get the cart for "userOne" and assert if
       // - Cart exists
       // - Length of "cartItems" array is 0
+      // CRIO_SOLUTION_START_MODULE_TEST
+      const dbCart = await Cart.findOne({ email: userOne.email });
+      expect(dbCart).toBeDefined();
+      expect(dbCart.cartItems.length).toEqual(0);
+      // CRIO_SOLUTION_END_MODULE_TEST
     });
   });
 });

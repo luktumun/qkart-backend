@@ -1,3 +1,5 @@
+// CRIO_SOLUTION_START_MODULE_UNDERSTANDING_BASICS
+// CRIO_SOLUTION_END_MODULE_UNDERSTANDING_BASICS
 const mongoose = require("mongoose");
 const config = require("../config/config");
 

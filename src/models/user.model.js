@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 // NOTE - "validator" external library and not the custom middleware at src/middlewares/validate.js
 const validator = require("validator");
 const config = require("../config/config");
+const bcrypt = require('bcryptjs');
 
 const userSchema = mongoose.Schema(
   {
@@ -10,10 +11,21 @@ const userSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+
     email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      validate: [validator.isEmail, "Email is Invalid"]
     },
+
     password: {
       type: String,
+      required: true,
+      trim: true,
+      minLength: 8,
       validate(value) {
         if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
           throw new Error(
@@ -22,17 +34,24 @@ const userSchema = mongoose.Schema(
         }
       },
     },
+
     walletMoney: {
+      type: Number,
+      required: true,
+      default: config.default_wallet_money
     },
+    
     address: {
       type: String,
       default: config.default_address,
     },
   },
+  // Create createdAt and updatedAt fields automatically
   {
     timestamps: true,
   }
 );
+
 
 /**
  * Check if email is taken
@@ -40,34 +59,28 @@ const userSchema = mongoose.Schema(
  * @returns {Promise<boolean>}
  */
 userSchema.statics.isEmailTaken = async function (email) {
+  const user = await this.findOne({email:email});
+  return user;
 };
 
-/**
- * Check if entered password matches the user's password
- * @param {string} password
- * @returns {Promise<boolean>}
- */
-userSchema.methods.isPasswordMatch = async function (password) {
+userSchema.pre('save', function (next) {
+    const salt = bcrypt.genSaltSync();
+    this.password = bcrypt.hashSync(this.password, salt);
+  next();
+})
+
+userSchema.methods.isPasswordMatch = async function (password){
+  return bcrypt.compare(password, this.password);
+}
+
+userSchema.methods.hasSetNonDefaultAddress = async function(){
+  return this.address !== config.default_address;
+}
+
+
+const User = mongoose.model('User', userSchema);
+
+
+module.exports = {
+  User: User
 };
-
-
-/**
- * Check if user have set an address other than the default address
- * - should return true if user has set an address other than default address
- * - should return false if user's address is the default address
- *
- * @returns {Promise<boolean>}
- */
-userSchema.methods.hasSetNonDefaultAddress = async function () {
-  const user = this;
-   return user.address === config.default_address;
-};
-
-/*
- * Create a Mongoose model out of userSchema and export the model as "User"
- * Note: The model should be accessible in a different module when imported like below
- * const User = require("<user.model file path>").User;
- */
-/**
- * @typedef User
- */

@@ -1,3 +1,5 @@
+// CRIO_SOLUTION_START_MODULE_CART
+// CRIO_SOLUTION_END_MODULE_CART
 const httpStatus = require("http-status");
 const { userOne } = require("../fixtures/user.fixture");
 const { Cart, Product } = require("../../src/models");

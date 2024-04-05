@@ -1,3 +1,5 @@
+// CRIO_SOLUTION_START_MODULE_UNDERSTANDING_BASICS
+// CRIO_SOLUTION_END_MODULE_UNDERSTANDING_BASICS
 import "antd/dist/antd.css";
 import React, { useLayoutEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";

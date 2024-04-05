@@ -1,3 +1,5 @@
+/* CRIO_SOLUTION_START_MODULE_UNDERSTANDING_BASICS */
+/* CRIO_SOLUTION_END_MODULE_UNDERSTANDING_BASICS */
 .footer {
   position: relative;
   left: 0;
@@ -8,8 +10,3 @@
   height: 100px;
   z-index: 2;
 }
-
-.footer-img{
-  margin-top:20px;
-}
-

@@ -1,3 +1,5 @@
+// CRIO_SOLUTION_START_MODULE_UNDERSTANDING_BASICS
+// CRIO_SOLUTION_END_MODULE_UNDERSTANDING_BASICS
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Button, Card, message, Spin, InputNumber } from "antd";
 import React from "react";
@@ -247,6 +249,7 @@ export default class Cart extends React.Component {
     this.setState({
       loading: false,
     });
+
     if (
       statusCode === "204" ||
       this.validateResponse(errored, response, statusCode)
@@ -267,6 +270,7 @@ export default class Cart extends React.Component {
    */
   refreshCart = async () => {
     const cart = await this.getCart();
+
     if (cart && cart.cartItems) {
       this.setState({
         items: cart.cartItems.map((item) => ({
@@ -322,7 +326,7 @@ export default class Cart extends React.Component {
       <InputNumber
         min={0}
         max={10}
-        value={item.quantity}
+        defaultValue={item.quantity}
         onChange={(value) => {
           this.putToCart(item.product._id, value);
         }}
